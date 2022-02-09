@@ -1,4 +1,4 @@
-#Scandiweb-entry-react-developer-test
+# Scandiweb-Entry-React-developer-TEST
 
 <picture>
 <img src="screenshots/1.jpg" alt="screenshot" width="100%"/>
