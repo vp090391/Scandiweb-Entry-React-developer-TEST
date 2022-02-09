@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&display=swap');
+
+.nav {
+    text-decoration: none;
+    color: #1D1F22;
+}
+
+.nav-btn {
+    cursor: pointer;
+    height: 80px;
+    font: 16px "Raleway", sans-serif;
+    font-weight: 400;
+    line-height: 20px;
+    border: 2px solid transparent;
+    border-radius: 0;
+    background: transparent;
+    padding: 16px;
+}
+
+.nav-btn:hover {
+    border-color: #5ECE7B;
+}
+
+.btn-active {
+    border-bottom: 2px solid #5ECE7B;
+}
+
+@media screen and (max-width: 420px) {
+    .nav-btn {
+        padding: 5px;
+    }
+}

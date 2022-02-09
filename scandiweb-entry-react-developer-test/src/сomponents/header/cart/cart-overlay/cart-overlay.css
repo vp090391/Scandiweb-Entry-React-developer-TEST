@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap');
+
+.cart-overlay {
+    position: absolute;
+    right: 0;
+    top: 60px;
+    box-sizing: border-box;
+    height: fit-content;
+    width: 325px;
+    box-shadow: 0 4px 49px -26px rgba(34, 60, 80, 0.32);
+    background: white;
+    z-index: 1;
+    padding: 8px 16px 20px 16px;
+}
+
+.cart-overlay .label {
+    font: 16px 'Raleway', sans-serif;
+    line-height: 26px;
+    font-weight: 500;
+    margin-bottom: 23px;
+}
+
+.cart-overlay .label span:nth-child(1) {
+    font-weight: 700;
+}
+
+.cart-overlay .total {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 35px;
+}
+
+.cart-overlay .total span:nth-child(1) {
+    font: 16px "Roboto", sans-serif;
+    font-weight: 500;
+    line-height: 28px;
+}
+
+.cart-overlay .total span:nth-child(2) {
+    font: 16px "Raleway", sans-serif;
+    font-weight: 700;
+    line-height: 28px;
+}
+
+.cart-overlay .buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.cart-overlay .buttons a {
+    text-decoration: none;
+    color: #1D1F22;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cart-overlay .buttons button {
+    cursor: pointer;
+    height: 43px;
+    width: 140px;
+    font: 14px "Raleway", sans-serif;
+    font-weight: 600;
+    border-radius: 0;
+    box-sizing: border-box;
+}
+
+.cart-overlay .buttons a {
+    cursor: pointer;
+    height: 43px;
+    width: 140px;
+    font: 14px "Raleway", sans-serif;
+    font-weight: 600;
+    border-radius: 0;
+    box-sizing: border-box;
+}
+
+.cart-overlay .buttons a {
+    border: 1px solid  #1D1F22;
+    background: transparent;
+}
+
+.cart-overlay .buttons button {
+    color: white;
+    border: none;
+    background: #5ECE7B;
+}
+
+.cart-overlay .buttons a:hover {
+    border-color: #5ECE7B;
+    box-shadow: 0 0 10px -2px rgba(34, 60, 80, 0.2);
+}
+
+.cart-overlay .buttons button:hover {
+    box-shadow: 0 0 10px -2px rgba(34, 60, 80, 0.2);
+}
+
+.cart-overlay .buttons button:active {
+    transform: scale(0.9);
+}
+
+.cart-overlay .buttons a:active {
+    transform: scale(0.9);
+}
+
+
+
+
+
+
+

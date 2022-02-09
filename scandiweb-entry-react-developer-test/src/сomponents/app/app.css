@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&display=swap');
+
+.app {
+    max-width: 1440px;
+    min-width: 360px;
+    font-family: 'Raleway', sans-serif;;
+    margin: 0 auto;
+    padding: 0 100px;
+}
+
+.server-error {
+    text-align: center;
+    margin-top: 5%;
+    white-space: pre-line;
+}
+
+@media screen and (max-width: 800px) {
+    .app {
+        padding: 0 10px;
+    }
+}
+

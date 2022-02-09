@@ -1,0 +1,28 @@
+.header {
+    position: relative;
+    height: 80px;
+    display: flex;
+    flex-flow: row  nowrap;
+    align-items: center;
+}
+
+.logo {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.currency {
+    margin: 0 10px 0 auto;
+}
+
+.nav {
+    align-self: end;
+}
+
+@media screen and (max-width: 800px) {
+    .logo {
+        position: static;
+        margin-left: auto;
+    }
+}

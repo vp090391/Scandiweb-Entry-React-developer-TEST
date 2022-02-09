@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&display=swap');
+
+.add-to-cart {
+    margin-bottom: 40px;
+}
+
+.out-of-stock-cart {
+    opacity: 0.5;
+    transform: none !important;
+}
+
+.add-to-cart-btn {
+    cursor: pointer;
+    height: 52px;
+    width: 100%;
+    font: 16px "Raleway", sans-serif;
+    font-weight: 600;
+    color: white;
+    line-height: 20px;
+    border: none;
+    border-radius: 0;
+    background: #5ECE7B;
+}
+
+.add-to-cart-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 19px -2px rgba(34, 60, 80, 0.2);
+}
+
+.add-to-cart-btn:active {
+    transform: none;
+}
+
+

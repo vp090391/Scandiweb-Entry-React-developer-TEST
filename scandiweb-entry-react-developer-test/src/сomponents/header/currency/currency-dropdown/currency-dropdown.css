@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&display=swap');
+
+.currency-dropdown {
+    position: absolute;
+    height: fit-content;
+    width: 114px;
+    box-shadow: 0 4px 49px -26px rgba(34, 60, 80, 0.32);
+    z-index: 1;
+}
+
+.currency-dropdown-btn {
+    cursor: pointer;
+    box-sizing: border-box;
+    height: 60px;
+    width: 100%;
+    font: 18px "Raleway", sans-serif;
+    font-weight: 500;
+    border: 2px solid transparent;
+    border-radius: 0;
+    background: white;
+    padding: 20px 40px 20px 20px;
+
+}
+
+.currency-dropdown-btn:hover {
+    border-color: #5ECE7B;
+}
+
+.currency-dropdown-btn span:first-child{
+    padding-right: 5px;
+}

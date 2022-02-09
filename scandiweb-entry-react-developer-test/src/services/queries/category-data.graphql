@@ -1,0 +1,28 @@
+query CategoryData ($input: CategoryInput) {
+    category (input: $input) {
+        products {
+            id
+            name
+            inStock
+            gallery
+            attributes {
+                id
+                name
+                type
+                items {
+                    displayValue
+                    value
+                    id
+                }
+            }
+            prices {
+                currency {
+                    symbol
+                    label
+                }
+                amount
+            }
+            brand
+        }
+    }
+}
