@@ -29,7 +29,6 @@ export default class GraphqlService {
             }}}
 
         const response = await client.query(queryOptions);
-        console.log(response)
         return response.data;
     };
 
