@@ -1,0 +1,8 @@
+query CategoryData ($input: CategoryInput) {
+    category (input: $input) {
+        products {
+            id
+            category
+        }
+    }
+}

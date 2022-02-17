@@ -51,6 +51,7 @@
 }
 
 .product-list-add-to-cart-btn {
+    visibility: hidden;
     position: absolute;
     height: 52px;
     width: 52px;
@@ -67,6 +68,10 @@
     width: 100%;
     height: 100%;
     border-radius: 50%;
+}
+
+.product-wrapper:hover .product-list-add-to-cart-btn {
+    visibility: visible;
 }
 
 .product-list-add-to-cart-btn:hover {

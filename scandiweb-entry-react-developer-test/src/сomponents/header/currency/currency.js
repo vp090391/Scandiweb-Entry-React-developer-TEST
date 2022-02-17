@@ -3,33 +3,27 @@ import './currency.css';
 import arrowIsDropdownClose from './arrowIsDropdownClose.svg';
 import arrowIsDropdownOpen from './arrowIsDropdownOpen.svg';
 import CurrencyDropdown from "./currency-dropdown/currency-dropdown";
-import GraphqlService from "../../../services/graphql-service";
 
 export default class Currency extends Component {
-
-    graphqlService = new GraphqlService();
 
     constructor() {
         super();
         this.state = {
             isDropdownOpen: false,
+            currencies: null
         }
     }
 
     componentDidMount() {
-        this.graphqlService.getCurrencies()
-            .then((data) => {
-                this.setState({
-                    currencies: [...data.currencies]
-                })
-            })
-            .catch((error) => {
-                console.log(`Query for currencies failed, error ${error}`)
-            })
+        this.setState({
+            currencies: [...this.props.currencies]
+        })
     }
 
     onDropdownToggle = () => {
-        this.setState({ isDropdownOpen: !this.state.isDropdownOpen })
+        this.setState({
+            isDropdownOpen: !this.state.isDropdownOpen
+        })
     };
 
     render() {
@@ -38,11 +32,12 @@ export default class Currency extends Component {
 
         return (
             <div className='currency'>
-
                 <button type='button'
                         className='currency-btn'
                         onClick={() => this.onDropdownToggle()}>
+
                     <span>{currentCurrency}</span>
+
                     { isDropdownOpen ?
                         <img src={arrowIsDropdownOpen} alt='arrow'/> :
                         <img src={arrowIsDropdownClose} alt='arrow'/>}
@@ -51,9 +46,8 @@ export default class Currency extends Component {
                 { isDropdownOpen ?
                     <CurrencyDropdown onDropdownToggle={this.onDropdownToggle}
                                       onCurrencyChange={onCurrencyChange}
-                                      currencies={currencies} /> :
-                    null}
-
+                                      currencies={currencies} />
+                    : null }
             </div>
         )
     }

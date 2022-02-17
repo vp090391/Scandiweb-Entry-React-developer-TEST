@@ -8,16 +8,19 @@ export default class CartOverlay extends Component {
         document.addEventListener('click', this.eventHandler)
     }
 
-    eventHandler = (event) => {
-        if (!event.target.closest('.cart-overlay') &&
-             !event.target.closest('.cart')) {
-            this.props.onOverlayToggle();
-        }
-    };
-
     componentWillUnmount() {
         document.removeEventListener('click', this.eventHandler)
     }
+
+    eventHandler = (event) => {
+        if (!event.target.closest('.cart-overlay')
+            && !event.target.closest('.minus')) {
+            if (!event.target.closest('.cart')
+                || event.target.closest('.cart-overlay-wrapper')) {
+                this.props.onOverlayToggle();
+            }
+        }
+    };
 
     render() {
         const { productsQuantity,
@@ -26,34 +29,46 @@ export default class CartOverlay extends Component {
                 currentCurrency,
                 checkOut,
                 changeQuantityByOne,
-                onOverlayToggle } = this.props;
+                onOverlayToggle,
+                checkOutLabelNotification,
+                changeCheckOutLabelNotification } = this.props;
 
         return (
-            <div className='cart-overlay'>
-                <div className='label'>
-                    <span>My bag, </span>
-                    <span>{`${productsQuantity} items`}</span>
-                </div>
+            <div className='cart-overlay-wrapper'>
+                <div className='cart-overlay-container'>
+                    <div className='cart-overlay'>
+                        <div className='label'>
+                            <span>My bag, </span>
+                            <span>{`${productsQuantity} items`}</span>
+                        </div>
 
-                <CartProductList cart={cart}
-                                 currentCurrency={currentCurrency}
-                                 changeQuantityByOne={changeQuantityByOne}/>
+                        <CartProductList cart={cart}
+                                         currentCurrency={currentCurrency}
+                                         changeQuantityByOne={changeQuantityByOne}
+                                         excludeArrows={true}/>
 
-                <div className='total'>
-                    <span>Total</span>
-                    <span>{total}</span>
-                </div>
+                        <div className='total'>
+                            <span>Total</span>
+                            <span>{total}</span>
+                        </div>
 
-                <div className='buttons'>
-                    <Link to='/cart' onClick={() => onOverlayToggle()}>
-                        VIEW BAG
-                    </Link>
-                    <button type='button' onClick={() =>{
-                        checkOut();
-                        onOverlayToggle()
-                    }}>
-                        CHECK OUT
-                    </button>
+                        <div className='buttons'>
+                            <Link to='/cart' onClick={() => onOverlayToggle()}>
+                                VIEW BAG
+                            </Link>
+
+                            <button type='button' onClick={() =>{
+                                checkOut();
+                                if ( cart.length ) {
+                                    onOverlayToggle()
+                                } else { changeCheckOutLabelNotification() }
+                            }}>
+                                { checkOutLabelNotification ?
+                                    checkOutLabelNotification
+                                    : 'CHECK OUT' }
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         )

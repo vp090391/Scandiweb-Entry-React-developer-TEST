@@ -1,9 +1,12 @@
 .header {
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: 1;
     height: 80px;
     display: flex;
     flex-flow: row  nowrap;
     align-items: center;
+    background: white;
 }
 
 .logo {

@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, {Component} from "react";
 import {Routes, Route} from "react-router-dom";
-import './app.css';
+import "./app.css";
 import GraphqlService from "../../services/graphql-service";
 import ProductListingPage from "../product-listing-page/product-listing-page";
 import ProductDescriptionPage from "../product-description-page/product-description-page";
-import Header from '../header/header'
+import Header from "../header/header";
 import Loading from "../loading/loading";
 import CartPage from "../cart-page/cart-page";
 
@@ -20,80 +20,61 @@ export default class App extends Component {
             unknownError: false,
 
             categoriesNames: null,
-            selectedCategory: null,
-            categoryProducts: null,
             currentCurrency: null,
+            currencies: null,
 
-            productsIdToRender: null,
+            productsForRoutes: null,
 
             cart: [],
             total: 0,
-
         }
     };
 
-    componentDidMount() {
-        this.graphqlService.getCategories()
+    componentDidMount = async () => {
+        await this.graphqlService.getCategories()
             .then(({ categories }) => {
                 this.setState({
                     categoriesNames: categories.map((category) => category.name),
-                    selectedCategory: categories[0].name,
                 });
             })
-            .catch((error) => {
-                console.log(`Error happened. ${error}`);
-                this.setState({
-                    serverErrorMessage: `Server is not available now.\n Please, start server endpoint from this root directory or contact the store owner.`,
-                    isLoading: false,
-                })
-            });
+            .catch(error => this.onErrorHandle(error));
 
-        this.graphqlService.getCurrencies()
-            .then((data) => {
+        await this.graphqlService.getProductsForRoutes(this.state.categoriesNames[0])
+            .then(({ category: { products } }) => {
                 this.setState({
-                    currentCurrency: data.currencies[0].symbol
+                    productsForRoutes: [...products],
                 })
             })
-            .catch((error) => {
-                console.log(`Query for currencies failed, error ${error}`)
-            });
+            .catch(error => this.onErrorHandle(error));
 
-        if ( window.localStorage.getItem('savedCart') &&
-             window.localStorage.getItem('savedCart').length ) {
+        await this.graphqlService.getCurrencies()
+            .then((data) => {
+                const storageCurrency = JSON.parse(window.localStorage
+                                            .getItem('currentCurrency'));
+                this.setState({
+                    currencies: [...data.currencies],
+                    currentCurrency: storageCurrency ?
+                                        storageCurrency
+                                        : data.currencies[0].symbol
+                })
+            })
+            .catch(error => this.onErrorHandle(error));
+
+        if ( window.localStorage.getItem('savedCart')
+            && window.localStorage.getItem('savedCart').length ) {
             this.setState({
-                cart: JSON.parse(window.localStorage.getItem('savedCart'))
+                cart: JSON.parse(window.localStorage.getItem('savedCart')),
             })
         }
+
+        this.setState({
+            isLoading: false
+        })
     };
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevState.selectedCategory !== this.state.selectedCategory) {
-            this.graphqlService.getCategory(this.state.selectedCategory)
-                .then(({ category: { products } }) => {
-                    if ( this.state.productsIdToRender === null ) {
-                        let newArray = [];
-                        products.forEach((product) => {
-                            newArray.push(product.id)
-                        });
-                        this.setState({
-                            productsIdToRender: newArray
-                        })
-                    }
-                    this.setState({
-                        categoryProducts: products,
-                        isLoading: false,
-                    });
-                })
-                .catch((error) => {
-                    console.log(`Error happened. ${error}`);
-                    this.setState({
-                        serverErrorMessage: `Server is not available now.\n Please, start server endpoint from this root directory or contact the store owner.`,
-                        isLoading: false,
-                    })
-                });
-        }
-        if (prevState.cart !== this.state.cart ||
-            prevState.currentCurrency !== this.state.currentCurrency) {
+        if (prevState.cart !== this.state.cart
+            || prevState.currentCurrency !== this.state.currentCurrency) {
             let newTotal = 0;
             this.state.cart.forEach((element) => {
                 element.prices.forEach((price) => {
@@ -105,8 +86,16 @@ export default class App extends Component {
             this.setState({
                 total: this.state.currentCurrency + newTotal.toFixed(2)
             });
-
-            window.localStorage.setItem('savedCart', JSON.stringify(this.state.cart))
+        }
+        if (prevState.cart !== this.state.cart) {
+            window.localStorage.setItem(
+                'savedCart',
+                JSON.stringify(this.state.cart))
+        }
+        if (prevState.currentCurrency !== this.state.currentCurrency) {
+            window.localStorage.setItem(
+                'currentCurrency',
+                JSON.stringify(this.state.currentCurrency))
         }
     }
 
@@ -115,18 +104,23 @@ export default class App extends Component {
         this.setState({ unknownError: 'Sorry, we have some problems with site' })
     }
 
-    onCategoryChange = ( selectedCategory ) => {
-        this.setState({ selectedCategory });
+    onErrorHandle = (error) => {
+        console.log(`Error happened. ${error}`);
+        this.setState({
+            serverErrorMessage: `Server is not available now.\n Please, start server endpoint from this root directory or contact the store owner.`,
+            isLoading: false,
+        })
     };
 
     onCurrencyChange = ( symbol ) => {
-        this.setState({ currentCurrency: symbol })
+        this.setState({ currentCurrency: symbol });
     };
 
     addToCart = ( product ) => {
         const cart = this.state.cart;
         const idx = cart.findIndex((element) => {
-            return JSON.stringify(element.attributes) === JSON.stringify(product.attributes)
+            return JSON.stringify(element.id) + JSON.stringify(element.attributes)
+                === JSON.stringify(product.id) + JSON.stringify(product.attributes)
         });
         if ( !cart[idx] ) {
             this.setState(({ cart }) => {
@@ -157,7 +151,8 @@ export default class App extends Component {
     changeQuantityByOne = ( product, sign ) => {
         const cart = this.state.cart;
         const idx = cart.findIndex((element) => {
-            return JSON.stringify(element.attributes) === JSON.stringify(product.attributes)
+            return JSON.stringify(element.id) + JSON.stringify(element.attributes)
+                === JSON.stringify(product.id) + JSON.stringify(product.attributes)
         });
         if ( sign === 'plus' ) {
             this.setState(({ cart }) => {
@@ -214,15 +209,14 @@ export default class App extends Component {
 
     render() {
         const { isLoading,
-            serverErrorMessage,
-            unknownError,
-            selectedCategory,
-            categoryProducts,
-            categoriesNames,
-            currentCurrency,
-            productsIdToRender,
-            cart,
-            total } = this.state;
+                serverErrorMessage,
+                unknownError,
+                categoriesNames,
+                currentCurrency,
+                currencies,
+                productsForRoutes,
+                cart,
+                total } = this.state;
 
         if ( isLoading || serverErrorMessage || unknownError ) {
             return (
@@ -237,35 +231,44 @@ export default class App extends Component {
         return (
             <div className='app'>
                 <Header categoriesNames={categoriesNames}
-                        selectedCategory={selectedCategory}
                         currentCurrency={currentCurrency}
+                        currencies={currencies}
                         cart={cart}
                         total={total}
-                        onCategoryChange={this.onCategoryChange}
                         onCurrencyChange={this.onCurrencyChange}
                         checkOut={this.checkOut}
                         changeQuantityByOne={this.changeQuantityByOne}
                 />
+
                 <Routes>
-                    <Route path='/'
-                           element={<ProductListingPage categoryProducts={categoryProducts}
-                                                        currentCurrency={currentCurrency}
-                                                        addToCart={this.addToCart}/>}/>
-                    <Route path={`/cart`}
+                    {categoriesNames.map((name) => {
+                        const path = name === 'all' ? '' : name;
+                        return (
+                            <Route path={`/${path}`}
+                                   key={name}
+                                   element={<ProductListingPage category={name}
+                                                                currentCurrency={currentCurrency}
+                                                                addToCart={this.addToCart}/>}/>
+                        )
+                    })}
+
+                    <Route path='/cart'
                            element={<CartPage cart={cart}
                                               total={total}
                                               currentCurrency={currentCurrency}
                                               checkOut={this.checkOut}
                                               changeQuantityByOne={this.changeQuantityByOne}/>}/>
-                    {productsIdToRender.map((id) => {
+
+                    {productsForRoutes.map((product) => {
+                        const { category, id } = product;
                         return (
-                            <Route path={`/${id}`}
+                            <Route path={`/${category}/${id}`}
                                    key={id}
                                    element={
                                        <ProductDescriptionPage
-                                       productId={id}
-                                       addToCart={this.addToCart}
-                                       currentCurrency={currentCurrency}/>
+                                           productId={id}
+                                           addToCart={this.addToCart}
+                                           currentCurrency={currentCurrency}/>
                                    }/>
                         )
                     })}

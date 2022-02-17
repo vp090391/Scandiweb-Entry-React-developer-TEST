@@ -3,25 +3,30 @@ import { Link } from "react-router-dom";
 import './cart-product-list.css';
 import Price from '../price/price';
 import CartProductListAttributes from "./cart-product-list-attributes/cart-product-list-attributes";
+import CartProductListImage from "./cart-product-list-image/cart-product-list-image";
 
 export default class CartProductList extends Component {
     constructor() {
         super();
         this.state = {
-            cart: []
+            cart: [],
         }
     }
 
     componentDidMount() {
         this.setState({
-            cart: [...this.props.cart].sort((a,b) => (a.id > b.id) ? -1 : ((b.id > a.id) ? 1 : 0))
+            cart: [...this.props.cart].sort((a,b) => {
+                return (a.id > b.id) ? -1 : ((b.id > a.id) ? 1 : 0)
+            })
         })
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.cart !== this.props.cart) {
             this.setState({
-                cart: [...this.props.cart].sort((a,b) => (a.id > b.id) ? -1 : ((b.id > a.id) ? 1 : 0))
+                cart: [...this.props.cart].sort((a,b) => {
+                    return (a.id > b.id) ? -1 : ((b.id > a.id) ? 1 : 0)
+                })
             })
         }
     }
@@ -29,26 +34,39 @@ export default class CartProductList extends Component {
     render() {
         const { cart } = this.state;
         const { currentCurrency,
-                changeQuantityByOne } = this.props;
+                changeQuantityByOne,
+                excludeArrows } = this.props;
 
         return (
             <>
                 {cart.map((product, index) => {
-                    const { id, brand, name, prices, attributes, quantity, image } = product;
+                    const { id,
+                            brand,
+                            name,
+                            prices,
+                            category,
+                            attributes,
+                            quantity,
+                            gallery } = product;
 
                     return (
                         <div className='product-item' key={index}>
                             <div className='product-properties'>
-                                <div className='product-properties-brand'>{brand}</div>
+                                <div className='product-properties-brand'>
+                                    {brand}
+                                </div>
+
                                 <div className='product-properties-name'>
-                                    <Link to={`/${id}`}>
+                                    <Link to={`/${category}/${id}`}>
                                         {name}
                                     </Link>
                                 </div>
+
                                 <div className='product-properties-price'>
                                     <Price prices={prices}
                                            currentCurrency={currentCurrency}/>
                                 </div>
+
                                 <div className='product-properties-attributes'>
                                     <CartProductListAttributes attributes={attributes}/>
                                 </div>
@@ -60,7 +78,11 @@ export default class CartProductList extends Component {
                                         onClick={() => changeQuantityByOne(product, 'plus')}>
                                     <span>+</span>
                                 </button>
-                                <div className='number'>{quantity}</div>
+
+                                <div className='number'>
+                                    {quantity}
+                                </div>
+
                                 <button type='button'
                                         className='minus'
                                         onClick={() => changeQuantityByOne(product, 'minus')}>
@@ -68,11 +90,8 @@ export default class CartProductList extends Component {
                                 </button>
                             </div>
 
-                            <div className='product-image'>
-                                <Link to={`/${id}`}>
-                                    <img src={image} alt='product'/>
-                                </Link>
-                            </div>
+                            <CartProductListImage gallery={gallery}
+                                                  excludeArrows={excludeArrows}/>
                         </div>
                     )
                 })}

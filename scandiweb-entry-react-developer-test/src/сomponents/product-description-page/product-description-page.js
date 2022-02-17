@@ -41,16 +41,23 @@ export default class ProductDescriptionPage extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevState.selectedAttributes.length !== this.state.selectedAttributes.length) {
             if (this.state.product.attributes.length === this.state.selectedAttributes.length) {
-                this.setState({ cartLabelNotification: null })
+                this.setState({
+                    cartLabelNotification: null
+                })
             }
         }
         if ( this.state.product.id !== this.props.productId ) {
             this.getProductData();
         }
+        if (prevProps.productId !== this.props.productId) {
+            this.setState({
+                selectedAttributes: []
+            })
+        }
     }
 
-    getProductData = () => {
-        this.graphqlService.getProductData(this.props.productId)
+    getProductData = async () => {
+        await this.graphqlService.getProductData(this.props.productId)
             .then(({ product }) => {
                 this.setState({
                     product,
@@ -111,39 +118,49 @@ export default class ProductDescriptionPage extends Component {
     };
 
     combineProduct = () => {
-        const product = this.state.product;
-        if (product.inStock) {
-            if (product.attributes.length === this.state.selectedAttributes.length) {
+        const { id,
+                brand,
+                name,
+                inStock,
+                prices,
+                category,
+                attributes,
+                gallery } = this.state.product;
+        if (inStock) {
+            if (attributes.length === this.state.selectedAttributes.length) {
                 const productForCart = {
-                    id: product.id,
-                    brand: product.brand,
-                    name: product.name,
-                    inStock: product.inStock,
-                    prices: product.prices,
+                    id: id,
+                    brand: brand,
+                    name: name,
+                    inStock: inStock,
+                    prices: prices,
+                    category: category,
                     attributes: this.state.selectedAttributes,
-                    image: product.gallery[0],
+                    gallery: gallery,
                     quantity: 1,
                 };
                 this.props.addToCart(productForCart);
-            } else (this.setState({ cartLabelNotification: 'Please, select all attributes' }))
+            } else (this.setState({
+                cartLabelNotification: 'Please, select all attributes'
+            }))
         }
     };
 
     render() {
         const { isLoading,
-            serverErrorMessage,
-            product: {
-                name,
-                inStock,
-                gallery,
-                description,
-                attributes,
-                prices,
-                brand
-            },
-            productMainPicture,
-            selectedAttributes,
-            cartLabelNotification } = this.state;
+                serverErrorMessage,
+                product: {
+                    name,
+                    inStock,
+                    gallery,
+                    description,
+                    attributes,
+                    prices,
+                    brand
+                },
+                productMainPicture,
+                selectedAttributes,
+                cartLabelNotification } = this.state;
         const { currentCurrency } = this.props;
 
         if ( isLoading || serverErrorMessage ) {
@@ -155,21 +172,19 @@ export default class ProductDescriptionPage extends Component {
             )
         }
 
-        const productImages = gallery.map(( image ) => {
-            return (
-                <img key={image}
-                     src={image}
-                     alt='product'
-                     onClick={() => this.onProductImageSelect(image)} />
-            )
-        });
-
-        const clazz = inStock ? '' : 'product-card-out-of-stock';
+        const clazz = inStock ? '' : 'product-out-of-stock';
 
         return (
             <div className='product-page'>
                 <div className='product-gallery'>
-                    {productImages}
+                    {gallery.map(( image ) => {
+                        return (
+                            <img key={image}
+                                 src={image}
+                                 alt='product'
+                                 onClick={() => this.onProductImageSelect(image)} />
+                        )
+                    })}
                 </div>
 
                 <div className={`product-main-picture ${clazz}`}>
@@ -178,20 +193,26 @@ export default class ProductDescriptionPage extends Component {
 
                 <div className='product-info'>
                     <div className='brand'>{brand}</div>
+
                     <div className='name'>{name}</div>
+
                     <Attributes attributes={attributes}
                                 selectAttribute={this.onAttributeSelect}
                                 selectedAttributes={selectedAttributes}/>
+
                     <div className='price'>
                         <div className='price-label'>PRICE:</div>
+
                         <div className='amount'>
                             <Price currentCurrency={currentCurrency}
                                    prices={prices}/>
                         </div>
                     </div>
+
                     <AddToCart inStock={inStock}
                                combineProduct={this.combineProduct}
                                cartLabelNotification={cartLabelNotification}/>
+
                     <Description description={description}/>
                 </div>
             </div>

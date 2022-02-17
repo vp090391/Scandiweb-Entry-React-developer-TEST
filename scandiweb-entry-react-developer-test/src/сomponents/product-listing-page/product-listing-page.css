@@ -1,9 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&display=swap');
+
+.products-label {
+    padding-top: 80px;
+    font: 42px 'Raleway', sans-serif;
+    font-weight: 400;
+    line-height: 68px;
+}
+
 .products {
-    padding: 80px 0;
+    padding: 100px 0;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 100px 40px;
     justify-items: center;
+    background: white;
 }
 
 .product-wrapper {

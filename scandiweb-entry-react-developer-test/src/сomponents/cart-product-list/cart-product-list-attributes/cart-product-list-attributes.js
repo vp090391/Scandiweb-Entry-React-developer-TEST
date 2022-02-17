@@ -11,14 +11,18 @@ export default class CartProductListAttributes extends Component {
 
     componentDidMount() {
         this.setState({
-            attributes: [...this.props.attributes].sort((a,b) => (a.type > b.type) ? -1 : ((b.type > a.type) ? 1 : 0))
+            attributes: [...this.props.attributes].sort((a,b) => {
+                return (a.type > b.type) ? -1 : ((b.type > a.type) ? 1 : 0)
+            })
         });
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if ( prevProps.attributes !== this.props.attributes ) {
             this.setState({
-                attributes: [...this.props.attributes].sort((a,b) => (a.type > b.type) ? -1 : ((b.type > a.type) ? 1 : 0))
+                attributes: [...this.props.attributes].sort((a,b) => {
+                    return (a.type > b.type) ? -1 : ((b.type > a.type) ? 1 : 0)
+                })
             });
         }
     }
@@ -31,10 +35,14 @@ export default class CartProductListAttributes extends Component {
                 {attributes.map(({ displayValue, id, name, type, value }, index) => {
                     const clazz = type === 'text' ? 'text' : 'swatch';
                     const backgroundColor = type === 'text' ? '' : value;
+
                     return (
                         <div key={index}
                              className='cart-product-attribute'>
-                            <div className='cart-product-attribute-name'>{name.toUpperCase()}:</div>
+                            <div className='cart-product-attribute-name'>
+                                {name.toUpperCase()}:
+                            </div>
+
                             <div className={`${clazz}`}
                                  style={{background: backgroundColor}}>
                                 { type === 'text' ? value : null }
@@ -43,7 +51,6 @@ export default class CartProductListAttributes extends Component {
                     )
                 })}
             </>
-
         )
     }
 }

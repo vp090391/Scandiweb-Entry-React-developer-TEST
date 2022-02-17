@@ -8,9 +8,7 @@ export default class Loading extends Component {
             <div className='loading'>
                 { this.props.isLoading ?
                     <img src={loading} alt='loading...'/>
-                    :
-                    null
-                }
+                    : null }
             </div>
         )
     }

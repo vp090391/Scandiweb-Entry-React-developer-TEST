@@ -1,0 +1,34 @@
+.product-image {
+    position: relative;
+}
+
+.product-image button {
+    position: absolute;
+    box-sizing: border-box;
+    cursor: pointer;
+    height: 24px;
+    width: 24px;
+    border: 2px solid transparent;
+    background: transparent;
+    padding: 0;
+}
+
+.product-image button:hover {
+    border-color: #5ECE7B;
+}
+
+.product-image button:active {
+    width: 20px;
+    height: 20px;
+}
+
+.left-arrow {
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+.right-arrow {
+    top: 50%;
+    right: 0;
+    transform: translate(0, -50%);
+}

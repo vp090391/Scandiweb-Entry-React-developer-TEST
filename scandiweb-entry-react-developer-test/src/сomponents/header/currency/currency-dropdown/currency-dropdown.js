@@ -7,8 +7,8 @@ export default class CurrencyDropdown extends Component {
     }
 
     eventHandler = (event) => {
-        if (!event.target.closest('.currency-dropdown') &&
-            !event.target.closest('.currency')) {
+        if (!event.target.closest('.currency-dropdown') 
+            && !event.target.closest('.currency')) {
             this.props.onDropdownToggle();
         }
     };
@@ -19,8 +19,8 @@ export default class CurrencyDropdown extends Component {
 
     render() {
         const { currencies,
-            onDropdownToggle,
-            onCurrencyChange } =this.props;
+                onDropdownToggle,
+                onCurrencyChange } =this.props;
 
         return (
             <div className='currency-dropdown'>

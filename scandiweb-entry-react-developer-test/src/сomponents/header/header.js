@@ -8,9 +8,8 @@ import Nav from "./nav/nav";
 export default class Header extends Component {
     render() {
         const { categoriesNames,
-                selectedCategory,
                 currentCurrency,
-                onCategoryChange,
+                currencies,
                 onCurrencyChange,
                 checkOut,
                 changeQuantityByOne,
@@ -19,12 +18,14 @@ export default class Header extends Component {
 
         return (
             <header className='header'>
-                <Nav categoriesNames={categoriesNames}
-                     selectedCategory={selectedCategory}
-                     onCategoryChange={onCategoryChange} />
+                <Nav categoriesNames={categoriesNames}/>
+
                 <Logo />
+
                 <Currency currentCurrency={currentCurrency}
+                          currencies={currencies}
                           onCurrencyChange={onCurrencyChange}/>
+
                 <Cart cart={cart}
                       total={total}
                       currentCurrency={currentCurrency}

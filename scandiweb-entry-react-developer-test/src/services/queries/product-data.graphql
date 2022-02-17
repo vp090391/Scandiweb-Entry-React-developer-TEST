@@ -5,6 +5,7 @@ query ProductData ($id: String!) {
         inStock
         gallery
         description
+        category
         attributes {
             id
             name

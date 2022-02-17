@@ -9,6 +9,7 @@ export default class Cart extends Component {
         this.state = {
             isOverlayOpen: false,
             productsQuantity: 0,
+            checkOutLabelNotification: null
         }
     }
 
@@ -18,13 +19,17 @@ export default class Cart extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.cart !== this.props.cart) {
-            this.countQuantity()
+            this.countQuantity();
+        }
+        if (prevProps.cart !== this.props.cart
+            && !prevProps.cart.length) {
+            this.changeCheckOutLabelNotification()
         }
     }
 
     countQuantity = () => {
         let quantity = 0;
-        this.props.cart.forEach((element) => {
+        this.props.cart.forEach(( element ) => {
             quantity += element.quantity;
         });
         this.setState({
@@ -33,12 +38,27 @@ export default class Cart extends Component {
     };
 
     onOverlayToggle = () => {
-        this.setState({ isOverlayOpen: !this.state.isOverlayOpen })
+        this.setState({
+            isOverlayOpen: !this.state.isOverlayOpen
+        })
+    };
+
+    changeCheckOutLabelNotification = () => {
+        if (!this.props.cart.length) {
+            this.setState({
+                checkOutLabelNotification: 'CHOOSE SOMETHING'
+            })
+        } else {
+            this.setState({
+                checkOutLabelNotification: null
+            })
+        }
     };
 
     render() {
         const { isOverlayOpen,
-                productsQuantity } = this.state;
+                productsQuantity,
+                checkOutLabelNotification } = this.state;
         const { currentCurrency,
                 cart,
                 total,
@@ -61,9 +81,11 @@ export default class Cart extends Component {
                                  total={total}
                                  currentCurrency={currentCurrency}
                                  checkOut={checkOut}
-                                 changeQuantityByOne={changeQuantityByOne}/> :
-                    null}
-
+                                 changeQuantityByOne={changeQuantityByOne}
+                                 checkOutLabelNotification={checkOutLabelNotification}
+                                 changeCheckOutLabelNotification={this.changeCheckOutLabelNotification}
+                    />
+                    : null }
             </div>
         )
     }

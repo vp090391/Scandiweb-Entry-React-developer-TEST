@@ -3,9 +3,13 @@ import './add-to-cart.css';
 
 export default class AddToCart extends Component {
     render() {
-        const { inStock, combineProduct, cartLabelNotification } = this.props;
+        const { inStock, 
+                combineProduct, 
+                cartLabelNotification } = this.props;
 
-        const cartLabel = inStock ? cartLabelNotification || 'ADD TO CART' : 'OUT OF STOCK';
+        const cartLabel = inStock ?
+            cartLabelNotification || 'ADD TO CART'
+            : 'OUT OF STOCK';
         const clazz = inStock ? '' : 'out-of-stock-cart';
 
         return (

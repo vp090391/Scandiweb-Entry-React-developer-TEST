@@ -15,6 +15,7 @@ export default class ProductCard extends Component {
                 name: null,
                 inStock: null,
                 gallery: null,
+                category: null,
                 attributes: null,
                 prices: null,
                 brand: null,
@@ -36,7 +37,9 @@ export default class ProductCard extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevState.selectedAttributes.length !== this.state.selectedAttributes.length) {
             if (this.state.product.attributes.length === this.state.selectedAttributes.length) {
-                this.setState({ cartLabelNotification: null })
+                this.setState({
+                    cartLabelNotification: null
+                })
             }
         }
         if (this.state.isAttributesPopupOpen === true ) {
@@ -55,8 +58,8 @@ export default class ProductCard extends Component {
     };
 
     eventHandler = (event) => {
-        if (!event.target.closest('.attributes-popup') &&
-            !event.target.closest('.product-list-add-to-cart-btn')) {
+        if (!event.target.closest('.attributes-popup')
+            && !event.target.closest('.product-list-add-to-cart-btn')) {
             this.setState({
                 isAttributesPopupOpen: false
             })
@@ -103,24 +106,34 @@ export default class ProductCard extends Component {
     };
 
     combineProduct = () => {
-        const product = this.state.product;
-        if (product.inStock) {
-            if (product.attributes.length === this.state.selectedAttributes.length) {
+        const { id,
+                brand,
+                name,
+                inStock,
+                prices,
+                category,
+                attributes,
+                gallery } = this.state.product;
+        if (inStock) {
+            if (attributes.length === this.state.selectedAttributes.length) {
                 const productForCart = {
-                    id: product.id,
-                    brand: product.brand,
-                    name: product.name,
-                    inStock: product.inStock,
-                    prices: product.prices,
+                    id: id,
+                    brand: brand,
+                    name: name,
+                    inStock: inStock,
+                    prices: prices,
+                    category: category,
                     attributes: this.state.selectedAttributes,
-                    image: product.gallery[0],
+                    gallery: gallery,
                     quantity: 1,
                 };
                 this.props.addToCart(productForCart);
                 this.setState({
                     isAttributesPopupOpen: false
                 })
-            } else (this.setState({ cartLabelNotification: 'Please, select all attributes' }))
+            } else (this.setState({
+                cartLabelNotification: 'Please, select all attributes'
+            }))
         }
     };
 
@@ -133,22 +146,23 @@ export default class ProductCard extends Component {
                 name,
                 inStock,
                 gallery,
+                category,
                 attributes,
                 prices,
                 brand
-            },
-            selectedAttributes,
-            cartLabelNotification,
-            isAttributesPopupOpen } = this.state;
+                },
+                selectedAttributes,
+                cartLabelNotification,
+                isAttributesPopupOpen } = this.state;
 
         const clazz = inStock ? "" : 'out-of-stock';
 
         return (
             <>
-                <Link to={`/${id}`}
+                <Link to={`/${category}/${id}`}
                       className={`product ${clazz}`}>
-
                     <img src={gallery[0]} alt='product' className='product-image'/>
+
                     <div className='product-name'>
                         <span>{brand}</span>
                         <span>{name}</span>
@@ -168,20 +182,19 @@ export default class ProductCard extends Component {
                         <img src={addToCartIcon}
                              alt='add to cart note'/>
                     </button>
-                    :
-                    null }
+                    : null }
 
                 { isAttributesPopupOpen ?
                     <div className='attributes-popup'>
                         <Attributes attributes={attributes}
                                     selectAttribute={this.onAttributeSelect}
                                     selectedAttributes={selectedAttributes}/>
+
                         <AddToCart inStock={inStock}
                                    combineProduct={this.combineProduct}
                                    cartLabelNotification={cartLabelNotification}/>
                     </div>
-                    :
-                    null }
+                    : null }
             </>
         )
     }

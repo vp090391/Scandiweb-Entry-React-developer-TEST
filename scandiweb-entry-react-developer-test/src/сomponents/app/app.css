@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&display=swap');
 
 .app {
-    max-width: 1440px;
+    max-width: 1240px;
     min-width: 360px;
     font-family: 'Raleway', sans-serif;;
     margin: 0 auto;
     padding: 0 100px;
+    background: white;
 }
 
 .server-error {
@@ -14,7 +15,7 @@
     white-space: pre-line;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 850px) {
     .app {
         padding: 0 10px;
     }

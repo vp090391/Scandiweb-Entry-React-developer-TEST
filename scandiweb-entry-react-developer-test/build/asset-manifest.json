@@ -1,19 +1,21 @@
 {
   "files": {
-    "main.css": "/static/css/main.695cd802.css",
-    "main.js": "/static/js/main.b58466c8.js",
+    "main.css": "/static/css/main.9f1127cc.css",
+    "main.js": "/static/js/main.8a854d6d.js",
     "static/media/addToCartIcon.svg": "/static/media/addToCartIcon.c2e3684bc5a8cc6fb5c9fac5037192d5.svg",
     "static/media/logo.svg": "/static/media/logo.d744ac57762637ce164fe1ff789d132b.svg",
     "static/media/cart.svg": "/static/media/cart.d19953670255792370f9fd25fc20f2ce.svg",
     "static/media/loading.svg": "/static/media/loading.bdc279f61f8b462499eb0d6319b19756.svg",
     "index.html": "/index.html",
+    "static/media/left-arrow.svg": "/static/media/left-arrow.b208c2753b0b96c27bc3909f2e77c99f.svg",
+    "static/media/right-arrow.svg": "/static/media/right-arrow.b9574fcc1807a3c7f36809dddd3409e6.svg",
     "static/media/arrowIsDropdownClose.svg": "/static/media/arrowIsDropdownClose.766d7b11f183f77a1e40c47ea18dd7ee.svg",
     "static/media/arrowIsDropdownOpen.svg": "/static/media/arrowIsDropdownOpen.f50a5cf5cf8bfef55adfa0e02aae74ee.svg",
-    "main.695cd802.css.map": "/static/css/main.695cd802.css.map",
-    "main.b58466c8.js.map": "/static/js/main.b58466c8.js.map"
+    "main.9f1127cc.css.map": "/static/css/main.9f1127cc.css.map",
+    "main.8a854d6d.js.map": "/static/js/main.8a854d6d.js.map"
   },
   "entrypoints": [
-    "static/css/main.695cd802.css",
-    "static/js/main.b58466c8.js"
+    "static/css/main.9f1127cc.css",
+    "static/js/main.8a854d6d.js"
   ]
 }

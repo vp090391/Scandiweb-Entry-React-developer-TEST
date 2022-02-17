@@ -5,6 +5,7 @@ query CategoryData ($input: CategoryInput) {
             name
             inStock
             gallery
+            category
             attributes {
                 id
                 name
